@@ -347,13 +347,18 @@ class _MyHomePageState extends State<MyHomePage> {
                         child: CodeEditor(
                           model: EditorModel(
                             styleOptions: EditorModelStyleOptions(
-                              heightOfContainer: method.value.item1.split("\n").length * 18,
+                              heightOfContainer:
+                                  method.value.item1.split("\n").length * 18,
                               fontSize: 12,
                               lineHeight: 1.35,
-                              padding: EdgeInsets.symmetric(vertical: 8, horizontal: 15),
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 8, horizontal: 15),
                             ),
                             files: [
-                              FileEditor(name: method.key, language: "dart", code: method.value.item1),
+                              FileEditor(
+                                  name: method.key,
+                                  language: "dart",
+                                  code: method.value.item1),
                             ],
                           ),
                           edit: false,
@@ -361,7 +366,8 @@ class _MyHomePageState extends State<MyHomePage> {
                         ),
                       ),
                       Container(
-                        padding: EdgeInsets.symmetric(horizontal: 18, vertical: 10),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 18, vertical: 10),
                         color: Colors.deepPurple,
                         alignment: Alignment.centerLeft,
                         child: Text(

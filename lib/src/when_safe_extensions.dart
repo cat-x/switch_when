@@ -30,7 +30,8 @@ import 'utils.dart';
 ///   },
 /// });
 /// ```
-T whenStringSafe<T>(String value, Map<String, ValueGetter<T>> conditionMap, {ValueGetter<T>? defaultValue}) {
+T whenStringSafe<T>(String value, Map<String, ValueGetter<T>> conditionMap,
+    {ValueGetter<T>? defaultValue}) {
   return (conditionMap[value] ?? defaultValue)!.call();
 }
 
@@ -55,7 +56,8 @@ T whenStringSafe<T>(String value, Map<String, ValueGetter<T>> conditionMap, {Val
 ///   },
 /// });
 /// ```
-T whenIntSafe<T>(int value, Map<int, ValueGetter<T>> conditionMap, {ValueGetter<T>? defaultValue}) {
+T whenIntSafe<T>(int value, Map<int, ValueGetter<T>> conditionMap,
+    {ValueGetter<T>? defaultValue}) {
   return (conditionMap[value] ?? defaultValue)!.call();
 }
 
@@ -80,7 +82,8 @@ T whenIntSafe<T>(int value, Map<int, ValueGetter<T>> conditionMap, {ValueGetter<
 ///   },
 /// });
 /// ```
-T whenDoubleSafe<T>(double value, Map<double, ValueGetter<T>> conditionMap, {ValueGetter<T>? defaultValue}) {
+T whenDoubleSafe<T>(double value, Map<double, ValueGetter<T>> conditionMap,
+    {ValueGetter<T>? defaultValue}) {
   return (conditionMap[value] ?? defaultValue)!.call();
 }
 
@@ -115,7 +118,8 @@ T whenDoubleSafe<T>(double value, Map<double, ValueGetter<T>> conditionMap, {Val
 /// ]);
 /// return degree;
 /// ```
-T? whenBoolSafe<T>(bool value, List<Tuple2<bool, ValueGetter<T>>> conditionList, {ValueGetter<T>? defaultValue}) {
+T? whenBoolSafe<T>(bool value, List<Tuple2<bool, ValueGetter<T>>> conditionList,
+    {ValueGetter<T>? defaultValue}) {
   for (var conditionTuple in conditionList) {
     if (conditionTuple.item1 == value) {
       return conditionTuple.item2();
@@ -152,8 +156,13 @@ T? whenBoolSafe<T>(bool value, List<Tuple2<bool, ValueGetter<T>>> conditionList,
 ///   },
 /// );
 /// ```
-T whenValueSafe<V, T>(V value, Map<V, ValueGetter<T>> conditionMap, {ValueGetter<T>? defaultValue}) {
-  return (conditionMap.entries.firstOrNullWhere((element) => const DeepCollectionEquality().equals(element.key, value))?.value ?? defaultValue)!
+T whenValueSafe<V, T>(V value, Map<V, ValueGetter<T>> conditionMap,
+    {ValueGetter<T>? defaultValue}) {
+  return (conditionMap.entries
+              .firstOrNullWhere((element) =>
+                  const DeepCollectionEquality().equals(element.key, value))
+              ?.value ??
+          defaultValue)!
       .call();
 }
 
@@ -182,7 +191,8 @@ T whenValueSafe<V, T>(V value, Map<V, ValueGetter<T>> conditionMap, {ValueGetter
 ///   },
 /// });
 /// ```
-T whenSafe<T>(Map<bool, ValueGetter<T>> conditionMap, {ValueGetter<T>? defaultValue}) {
+T whenSafe<T>(Map<bool, ValueGetter<T>> conditionMap,
+    {ValueGetter<T>? defaultValue}) {
   for (var element in conditionMap.entries) {
     if (element.key) {
       return element.value();
@@ -225,7 +235,8 @@ T whenSafe<T>(Map<bool, ValueGetter<T>> conditionMap, {ValueGetter<T>? defaultVa
 ///  }
 ///});
 /// ```
-T whenTrueSafe<T>(Map<ValueGetter<bool>, ValueGetter<T>> conditionMap, {ValueGetter<T>? defaultValue}) {
+T whenTrueSafe<T>(Map<ValueGetter<bool>, ValueGetter<T>> conditionMap,
+    {ValueGetter<T>? defaultValue}) {
   for (var element in conditionMap.entries) {
     if (element.key.call()) {
       return element.value();

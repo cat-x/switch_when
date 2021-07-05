@@ -149,7 +149,10 @@ T? whenBool<T>(bool value, List<Tuple2<bool, ValueGetter<T>>> conditionList) {
 /// );
 /// ```
 T? whenValue<V, T>(V value, Map<V, ValueGetter<T>> conditionMap) {
-  return conditionMap.entries.firstOrNullWhere((element) => const DeepCollectionEquality().equals(element.key, value))?.value();
+  return conditionMap.entries
+      .firstOrNullWhere((element) =>
+          const DeepCollectionEquality().equals(element.key, value))
+      ?.value();
 }
 
 /// English: The when function of the Kotlin version of the method [switch].<br>
