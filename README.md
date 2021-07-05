@@ -1,7 +1,7 @@
 Language: [English](README.md) | [中文简体](README-ZH.md)
 # switch_when
 
-A function library that provides a more advanced switch method, does not limit the case expression to be constant, which is close to the when method of kotlin.
+A function library that provides a more advanced switch, does not restrict Case expressions to be constants, similar to kotlin's when method.
 
 ## Getting Started
 
@@ -16,7 +16,7 @@ dependencies:
 1. import package
  Where you need to use the Library library, import the package
 ```dart
-import 'package:switch_when/index.dart';
+import 'package:switch_when/switch_when.dart';
 ```
 
 2. Use functions
@@ -40,6 +40,7 @@ Different methods are used according to different situations. For general situat
 T? whenString<T>(String value, Map<String, ValueGetter<T>> conditionMap)
 T? whenInt<T>(int value, Map<int, ValueGetter<T>> conditionMap)
 T? whenDouble<T>(double value, Map<double, ValueGetter<T>> conditionMap) 
+T? whenBool<T>(bool value, List<Tuple2<bool, ValueGetter<T>>> conditionList)
 T? whenValue<V, T>(V value, Map<V, ValueGetter<T>> conditionMap)
 T? when<T>(Map<bool, ValueGetter<T>> conditionMap)
 T? whenTrue<T>(Map<ValueGetter<bool>, ValueGetter<T>> conditionMap)
@@ -48,6 +49,7 @@ T? whenTrue<T>(Map<ValueGetter<bool>, ValueGetter<T>> conditionMap)
 T whenStringSafe<T>(String value, Map<String, ValueGetter<T>> conditionMap, {ValueGetter<T>? defaultValue}) 
 T whenIntSafe<T>(int value, Map<int, ValueGetter<T>> conditionMap, {ValueGetter<T>? defaultValue})
 T whenDoubleSafe<T>(double value, Map<double, ValueGetter<T>> conditionMap, {ValueGetter<T>? defaultValue}) 
+T? whenBoolSafe<T>(bool value, List<Tuple2<bool, ValueGetter<T>>> conditionList, {ValueGetter<T>? defaultValue}) 
 T whenValueSafe<V, T>(V value, Map<V, ValueGetter<T>> conditionMap, {ValueGetter<T>? defaultValue}) 
 T whenSafe<T>(Map<bool, ValueGetter<T>> conditionMap, {ValueGetter<T>? defaultValue})
 T whenTrueSafe<T>(Map<ValueGetter<bool>, ValueGetter<T>> conditionMap, {ValueGetter<T>? defaultValue}) 
@@ -127,6 +129,38 @@ example:
 ```
 </details>
 
+
+<details>
+  <summary>T? whenBool<T>(bool value, List<Tuple2<bool, ValueGetter<T>>> conditionList)</summary>
+<p> Used to replace the switch method, because some scenes use [switch] to cause an error warning of Case expressions must be constant.<br>
+If there is [value] in [Tuple2.item1] of [conditionList], execute its corresponding [ValueGetter] method
+</p>
+
+example:
+```dart
+  double? degree = whenBool<double>(false, [
+    Tuple2(
+      "is Long String".length > 10,
+      () {
+        return 0.0;
+      },
+    ),
+    Tuple2(
+      100 / 10 == 0,
+      () {
+        return 1.0;
+      },
+    ),
+    Tuple2(
+      "apple".contains("a"),
+      () {
+        return 2.0;
+      },
+    ),
+  ]);
+  return degree;
+```
+</details>
 
 
 <details>
@@ -209,6 +243,24 @@ String? something = whenTrue<String>({
 ### Example Demo:
 
 ```dart
+  testWhenValue() {
+    String? kind = whenValue<List, String>(
+      ["apple", "orange"],
+      {
+        ["cat", "dog"]: () {
+          return "pets";
+        },
+        ["apple", "orange"]: () {
+          return "fruits";
+        },
+        ["red", "white", "black"]: () {
+          return "colors";
+        },
+      },
+    );
+    return kind;
+  }
+
   testWhenString() {
     int howManyFruits = 2;
     int? index = whenString<int>("banana🍌", {
@@ -264,7 +316,7 @@ String? something = whenTrue<String>({
 ```
 
 #### Demo Pictrue
-<!-- ![demo](demo.gif) -->
+![demo](demo.png)
 
 
 

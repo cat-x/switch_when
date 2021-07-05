@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:switch_when/index.dart';
+import 'package:switch_when/switch_when.dart';
+import 'package:code_editor/code_editor.dart';
+import 'package:tuple/tuple.dart';
 
 void main() {
   runApp(MyApp());
@@ -10,7 +12,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'tween_image_widget Demo',
+      title: 'switch_when Demo',
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -23,7 +25,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Tween Image Widget Home Page'),
+      home: MyHomePage(title: 'Switch When Home Page'),
     );
   }
 }
@@ -105,6 +107,30 @@ class _MyHomePageState extends State<MyHomePage> {
     return status;
   }
 
+  testWhenBool() {
+    double? degree = whenBool<double>(false, [
+      Tuple2(
+        "is Long String".length > 10,
+        () {
+          return 0.0;
+        },
+      ),
+      Tuple2(
+        100 / 10 == 0,
+        () {
+          return 1.0;
+        },
+      ),
+      Tuple2(
+        "apple".contains("a"),
+        () {
+          return 2.0;
+        },
+      ),
+    ]);
+    return degree;
+  }
+
   testWhenValue() {
     String? kind = whenValue<List, String>(
       ["apple", "orange"],
@@ -157,8 +183,9 @@ class _MyHomePageState extends State<MyHomePage> {
     return something;
   }
 
-  Map<String, Function> get data => {
-        """
+  Map<String, Tuple2<String, Function>> get data => {
+        "WhenString": Tuple2(
+          """
     int howManyFruits = 2;
     int? index = whenString<int>("banana🍌", {
       "water" + "melon".more(): () {
@@ -177,8 +204,11 @@ class _MyHomePageState extends State<MyHomePage> {
         return 5;
       },
     });
-    """: testWhenString,
-        """
+    """,
+          testWhenString,
+        ),
+        "whenInt": Tuple2(
+          """
       String? status = whenInt<String>(1, {
       1: () {
         return "good";
@@ -190,8 +220,11 @@ class _MyHomePageState extends State<MyHomePage> {
         return "better";
       },
     });
-    """: testWhenInt,
-        """
+    """,
+          testWhenInt,
+        ),
+        "whenDouble": Tuple2(
+          """
       String? status = whenDouble<String>(2.0, {
       0.1: () {
         return "good";
@@ -203,8 +236,37 @@ class _MyHomePageState extends State<MyHomePage> {
         return "better";
       },
     });
-    """: testWhenDouble,
-        """
+    """,
+          testWhenDouble,
+        ),
+        "whenBool": Tuple2(
+          """
+      double? degree = whenBool<double>(false, [
+      Tuple2(
+        "is Long String".length > 10,
+        () {
+          return 0.0;
+        },
+      ),
+      Tuple2(
+        100 / 10 == 0,
+        () {
+          return 1.0;
+        },
+      ),
+      Tuple2(
+        "apple".contains("a"),
+        () {
+          return 2.0;
+        },
+      ),
+    ]);
+    return degree;
+    """,
+          testWhenBool,
+        ),
+        "whenValue": Tuple2(
+          """
        String? kind = whenValue<List, String>(
       ["apple", "orange"],
       {
@@ -219,8 +281,11 @@ class _MyHomePageState extends State<MyHomePage> {
         },
       },
     );
-    """: testWhenValue,
-        """
+    """,
+          testWhenValue,
+        ),
+        "when": Tuple2(
+          """
     String? winner = when<String>({
       "Dart is Language".contains("UI"): () {
         return "Flutter";
@@ -229,8 +294,11 @@ class _MyHomePageState extends State<MyHomePage> {
         return "Flutter";
       },
     });
-    """: testWhen,
-        """
+    """,
+          testWhen,
+        ),
+        "whenTrue": Tuple2(
+          """
     String? something = whenTrue<String>({
       () {
         if (1 + 100 * 1000 < 2000) {
@@ -249,7 +317,9 @@ class _MyHomePageState extends State<MyHomePage> {
         return "PI get";
       }
     });
-    """: testWhenTrue,
+    """,
+          testWhenTrue,
+        ),
       };
 
   @override
@@ -273,10 +343,31 @@ class _MyHomePageState extends State<MyHomePage> {
           children: data.entries
               .map((method) => Column(
                     children: [
-                      Text(method.key),
-                      Text("run result=> ${method.value()}"),
-                      SizedBox(
-                        height: 20,
+                      IgnorePointer(
+                        child: CodeEditor(
+                          model: EditorModel(
+                            styleOptions: EditorModelStyleOptions(
+                              heightOfContainer: method.value.item1.split("\n").length * 18,
+                              fontSize: 12,
+                              lineHeight: 1.35,
+                              padding: EdgeInsets.symmetric(vertical: 8, horizontal: 15),
+                            ),
+                            files: [
+                              FileEditor(name: method.key, language: "dart", code: method.value.item1),
+                            ],
+                          ),
+                          edit: false,
+                          disableNavigationbar: false,
+                        ),
+                      ),
+                      Container(
+                        padding: EdgeInsets.symmetric(horizontal: 18, vertical: 10),
+                        color: Colors.deepPurple,
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          "run result=> ${method.value.item2()}",
+                          style: TextStyle(color: Colors.white),
+                        ),
                       ),
                     ],
                   ))

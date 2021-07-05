@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:switch_when/index.dart';
+import 'package:switch_when/switch_when.dart';
+import 'package:tuple/tuple.dart';
 
 extension Stringx on String {
   String more() {
@@ -60,6 +61,30 @@ void main() {
         },
       });
       expect(status, "nice");
+    });
+
+    test('testWhenDouble', () {
+      double? degree = whenBool<double>(false, [
+        Tuple2(
+          "is Long String".length > 10,
+          () {
+            return 0.0;
+          },
+        ),
+        Tuple2(
+          100 / 10 == 0,
+          () {
+            return 1.0;
+          },
+        ),
+        Tuple2(
+          "apple".contains("a"),
+          () {
+            return 2.0;
+          },
+        ),
+      ]);
+      expect(degree, 1.0);
     });
 
     test('testWhenValue', () {

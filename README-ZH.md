@@ -1,7 +1,7 @@
 Language: [English](README.md) | [中文简体](README-ZH.md)
 # switch_when
 
-一个提供更高级的switch的函数库，不限制Case表达式需要是常量，接近于kotlin的when方法
+一个提供更高级的switch的函数库，不限制Case表达式需要是常量，类似于kotlin的when方法
 
 ## Getting Started
 
@@ -16,7 +16,7 @@ dependencies:
 1. 导包
  在需要使用该Library库的地方，导入package
 ```dart
-import 'package:switch_when/index.dart';
+import 'package:switch_when/switch_when.dart';
 ```
 
 2. 使用函数
@@ -103,6 +103,7 @@ example:
 ```
 </details>
 
+
 <details>
   <summary>T? whenDouble<T>(double value, Map<double, ValueGetter<T>> conditionMap)</summary>
 <p>用于取代switch方法，因为有些场景使用[switch]会出现Case expressions must be constant.的错误警告；<br>
@@ -125,6 +126,38 @@ example:
 ```
 </details>
 
+
+<details>
+  <summary>T? whenBool<T>(bool value, List<Tuple2<bool, ValueGetter<T>>> conditionList)</summary>
+<p> 用于取代switch方法，因为有些场景使用[switch]会出现Case expressions must be constant.的错误警告；<br>
+如果[conditionList]的[Tuple2.item1]中有[value]的话，执行其对应的[ValueGetter]方法
+</p>
+
+example:
+```dart
+  double? degree = whenBool<double>(false, [
+    Tuple2(
+      "is Long String".length > 10,
+      () {
+        return 0.0;
+      },
+    ),
+    Tuple2(
+      100 / 10 == 0,
+      () {
+        return 1.0;
+      },
+    ),
+    Tuple2(
+      "apple".contains("a"),
+      () {
+        return 2.0;
+      },
+    ),
+  ]);
+  return degree;
+```
+</details>
 
 
 <details>
@@ -208,6 +241,24 @@ String? something = whenTrue<String>({
 ### 例子Demo:
 
 ```dart
+  testWhenValue() {
+    String? kind = whenValue<List, String>(
+      ["apple", "orange"],
+      {
+        ["cat", "dog"]: () {
+          return "pets";
+        },
+        ["apple", "orange"]: () {
+          return "fruits";
+        },
+        ["red", "white", "black"]: () {
+          return "colors";
+        },
+      },
+    );
+    return kind;
+  }
+  
   testWhenString() {
     int howManyFruits = 2;
     int? index = whenString<int>("banana🍌", {
@@ -263,7 +314,7 @@ String? something = whenTrue<String>({
 ```
 
 #### Demo 截图
-<!-- ![demo](demo.gif) -->
+![demo](demo.png)
 
 
 
